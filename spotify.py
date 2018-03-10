@@ -32,6 +32,7 @@ class spotify:
         """
         with open("config.yml", 'r') as ymlfile:
             cfg = yaml.load(ymlfile)
+        print(cfg)
         token = util.prompt_for_user_token(self.user, scope=cfg['scope'], client_id=cfg['spotipy_client_id'],
                                            client_secret=cfg['spotipy_client_secret'], redirect_uri=cfg['spotipy_redirect_uri'])
         sp = spotipy.Spotify(auth=token)
@@ -116,10 +117,3 @@ class spotify:
             logging.debug('Song already in playlist')
         else:
             self.sp.user_playlist_add_tracks(self.user, playlist_id, song_uri)
-
-
-if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, filemode='w', level=logging.DEBUG,
-                        format='%(asctime)s %(levelname)s %(message)s')
-    logging.debug('Program Intialized')
-    
