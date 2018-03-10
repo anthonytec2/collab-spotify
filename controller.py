@@ -15,7 +15,8 @@ class controller:
         self.disp = run_display.run_display(self.sp)
         self.playlist = None
         self.logger = logging.getLogger(__name__)
-
+        self.owner=username
+        
     def main_loop(self):
         """[main loop for running all commands]
         """
@@ -31,10 +32,11 @@ class controller:
             num {[int]} -- [incoming option]
         """
         if num == 1:
-            pl_names, pl_ids = self.sp.list_playlists()
+            pl_names, pl_ids,pl_own = self.sp.list_playlists(self.owner)
             pl_id, num_sel = self.disp.display_user_playlists(pl_names, pl_ids)
             num_pl = self.disp.select_number(0, num_sel)
             self.playlist = pl_id[num_pl]
+            self.owner=pl_own[num_pl]
         elif num == 2:
             if self.playlist:
                 name = self.disp.prompt()
@@ -46,11 +48,11 @@ class controller:
             else:
                 self.logger.debug('Please Select a Playlist first')
         elif num == 3:
-            pl_names, pl_ids = self.sp.list_playlists()
+            pl_names, pl_ids,_ = self.sp.list_playlists(self.owner)
             pl_id, num_sel = self.disp.display_user_playlists(pl_names, pl_ids)
             input("Press the <ENTER> key to continue...")
         elif num == 4:
-            song_uri_ls, song_ls = self.sp.list_pl_songs(self.playlist)
+            song_uri_ls, song_ls = self.sp.list_pl_songs(self.playlist, self.owner)
             self.disp.display_user_tracks(song_ls)
             input("Press the <ENTER> key to continue...")
         elif num == 5:
@@ -61,7 +63,8 @@ class controller:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(stream=sys.stdout, filemode='w', level=logging.DEBUG,
+    logging.basicConfig(filename='data.log', filemode='w', level=logging.INFO,
                         format='%(asctime)s %(levelname)s %(message)s')
     logging.debug('Program Intialized')
-    
+    cont = controller('anthonytec2')
+    cont.main_loop()

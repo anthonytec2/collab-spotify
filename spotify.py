@@ -46,7 +46,7 @@ class spotify:
         Keyword Arguments:
             desc {str} -- [description of playlist] (default: {''})
         """
-        pl_names, _ = self.list_playlists()
+        pl_names, _,_= self.list_playlists()
         if name in pl_names:
             self.logger.debug(
                 'Playlist Name Already Exists, please use another name')
@@ -92,7 +92,8 @@ class spotify:
             playlists = self.sp.user_playlists(self.user)['items']
         pl_names = [pl['name'] for pl in playlists]
         pl_id = [pl['id'] for pl in playlists]
-        return pl_names, pl_id
+        pl_own=[pl['owner']['id'] for pl in playlists]
+        return pl_names, pl_id,pl_own
 
     def list_pl_songs(self, pl_id, user=None):
         """[list all the songs for a given playlist id]
@@ -130,3 +131,9 @@ class spotify:
             else:
                 self.sp.user_playlist_add_tracks(
                     self.user, playlist_id, song_uri)
+   
+    def list_users_friends(self):
+        """[would list out friends, not working]
+        """
+        user = self.sp.user(self.user)
+        return user
