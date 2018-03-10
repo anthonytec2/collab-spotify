@@ -3,3 +3,4 @@ config.yml
 *.log
 .vscode
 spotipy
+__pycache__/
