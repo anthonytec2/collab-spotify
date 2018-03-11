@@ -3,7 +3,6 @@ import run_display
 import spotify
 import sys
 
-
 class controller:
     def __init__(self):
         """[intialize controller class to run display]
@@ -21,9 +20,8 @@ class controller:
         """[main loop for running all commands]
         """
         while True:
-            self.disp.display_commands()
-            num = self.disp.select_number(low=1, high=7)
-            self.handle_request(num)
+            menu_num=self.disp.display_commands(self.owner)
+            self.handle_request(menu_num)
 
     def handle_request(self, num):
         """[handles which option to process]
@@ -59,8 +57,7 @@ class controller:
             pl_name = self.disp.prompt('Playlist Name : ')
             self.sp.create_new_playlist(pl_name)
         elif num == 6:
-            sys.exit(0)
-
+            sys.exit(4)            
 
 if __name__ == "__main__":
     logging.basicConfig(filename='data.log', filemode='w', level=logging.INFO,
