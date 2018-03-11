@@ -3,10 +3,9 @@ from tabulate import tabulate
 import os
 import spotify
 import sys
-
-
-def clear(): return os.system('clear')
-
+import controller
+from cursesmenu import CursesMenu
+from cursesmenu.items import FunctionItem, SubmenuItem, CommandItem, SelectionItem, ExitItem
 
 class run_display:
     def __init__(self, sp):
@@ -53,7 +52,6 @@ class run_display:
         """
         pl_names_ls = []
         pl_names = [[i, pl_name] for i, pl_name in enumerate(pl_names)]
-        clear()
         print(tabulate(pl_names))
         return pl_ids, len(pl_names)
 
@@ -63,19 +61,31 @@ class run_display:
         Arguments:
             track_ls {[list]} -- [list of lists of song name, album, time and popularity]
         """
-
-        clear()
         print(tabulate(track_ls, headers=[
               "#", "Name", "Album", "Time", "Popularity"]))
 
-    def display_commands(self):
+    def display_commands(self, user=None):
         """[displats all commands for user]
         """
+    
+        if user:
+            menu = CursesMenu("Spotify Collobrative Playlist", "User: " + user,show_exit_option=False)
+        else:
+            menu = CursesMenu("Spotify Collobrative Playlist", "User",show_exit_option=True)
+        sl1 = SelectionItem("Choose Active Playlist", 1)
+        sl2 = SelectionItem("Add new song to playlist", 2)
+        sl3 = SelectionItem("List Playlists", 3)
+        sl4 = SelectionItem("Print Songs in Playlist", 4)
+        sl5 = SelectionItem("Create Playlist", 5)
+        sl6 = SelectionItem("Exit", 6)
+        menu.append_item(sl1)
+        menu.append_item(sl2)
+        menu.append_item(sl3)
+        menu.append_item(sl4)
+        menu.append_item(sl5)
+        menu.append_item(sl6)
+        menu.start()
+        menu.join()
+        return menu.returned_value
 
-        clear()
-        print("1) Choose Active Playlist")
-        print("2) Add new song to playlist")
-        print("3) List Playlists")
-        print("4) Print Songs in Playlist")
-        print("5) Create Playlist")
-        print("6) Exit")
+
