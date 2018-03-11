@@ -4,3 +4,4 @@ config.yml
 .vscode
 spotipy
 __pycache__/
+*.ipynb

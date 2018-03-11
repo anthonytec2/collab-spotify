@@ -5,17 +5,17 @@ import sys
 
 
 class controller:
-    def __init__(self, username):
+    def __init__(self):
         """[intialize controller class to run display]
 
         Arguments:
             username {[string]} -- [username for spotify]
         """
-        self.sp = spotify.spotify(username)
+        self.sp = spotify.spotify()
         self.disp = run_display.run_display(self.sp)
         self.playlist = None
         self.logger = logging.getLogger(__name__)
-        self.owner=username
+        self.owner=self.sp.user
         
     def main_loop(self):
         """[main loop for running all commands]
@@ -66,5 +66,5 @@ if __name__ == "__main__":
     logging.basicConfig(filename='data.log', filemode='w', level=logging.INFO,
                         format='%(asctime)s %(levelname)s %(message)s')
     logging.debug('Program Intialized')
-    cont = controller('anthonytec2')
+    cont = controller()
     cont.main_loop()
