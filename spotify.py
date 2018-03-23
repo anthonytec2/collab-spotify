@@ -15,7 +15,7 @@ import yaml
 class spotify:
 
     def __init__(self):
-        """[initalize spotify class to be used to manage playlists]
+        """[initialize spotify class to be used to manage playlists]
         """
         self.sp, self.user = self.init_auth_client()
         self.logger = logging.getLogger(__name__)

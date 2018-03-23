@@ -2,7 +2,9 @@ import logging
 import run_display
 import spotify
 import sys
-
+import pickle
+import os
+import playlist
 class controller:
     def __init__(self):
         """[intialize controller class to run display]
@@ -15,7 +17,26 @@ class controller:
         self.playlist = None
         self.logger = logging.getLogger(__name__)
         self.owner=self.sp.user
-        
+        self.playlist_info=self.__get_pl_info()
+    
+    def save_dat(self):
+        pickle.dump( self.playlist_info, open( "plinfo.p", "wb" ) )
+            
+
+    def __get_pl_info(self):
+        playlist_info={}
+        if os.path.isfile("plinfo.p"):
+            playlist_info = pickle.load( open( "plinfo.p", "rb" ) )
+        else:
+            pl=self.sp.list_playlists()
+            for idx, sp in enumerate(pl[1]):
+                try:
+                    _, song_ls=self.sp.list_pl_songs(sp)
+                    playlist_info[pl[0][idx]]=playlist.playlist(pl[0][idx], song_ls,self.sp.user,sp)
+                except:
+                    pass
+        return playlist_info
+
     def main_loop(self):
         """[main loop for running all commands]
         """
@@ -50,7 +71,7 @@ class controller:
             pl_id, num_sel = self.disp.display_user_playlists(pl_names, pl_ids)
             input("Press the <ENTER> key to continue...")
         elif num == 4:
-            song_uri_ls, song_ls = self.sp.list_pl_songs(self.playlist, self.owner)
+            _, song_ls = self.sp.list_pl_songs(self.playlist, self.owner)
             self.disp.display_user_tracks(song_ls)
             input("Press the <ENTER> key to continue...")
         elif num == 5:
@@ -64,4 +85,6 @@ if __name__ == "__main__":
                         format='%(asctime)s %(levelname)s %(message)s')
     logging.debug('Program Intialized')
     cont = controller()
-    cont.main_loop()
+    cont.save_dat()
+    print(cont.playlist_info)
+    #cont.main_loop()
