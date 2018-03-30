@@ -1,5 +1,5 @@
 '''
-Anthony Bisulco Python Spotify 
+Anthony Bisulco Python Spotify
 Collobrative Playlist
 class to interface with spotify
 '''
@@ -29,8 +29,12 @@ class spotify:
         """
         with open("config.yml", 'r') as ymlfile:
             cfg = yaml.load(ymlfile)
-        token = util.prompt_for_user_token(cfg['username'], scope=cfg['scope'], client_id=cfg['spotipy_client_id'],
-                                           client_secret=cfg['spotipy_client_secret'], redirect_uri=cfg['spotipy_redirect_uri'])
+        token = util.prompt_for_user_token(
+            cfg['username'],
+            scope=cfg['scope'],
+            client_id=cfg['spotipy_client_id'],
+            client_secret=cfg['spotipy_client_secret'],
+            redirect_uri=cfg['spotipy_redirect_uri'])
         sp = spotipy.Spotify(auth=token)
         return sp, cfg['username']
 
@@ -43,7 +47,7 @@ class spotify:
         Keyword Arguments:
             desc {str} -- [description of playlist] (default: {''})
         """
-        pl_names, _,_= self.list_playlists()
+        pl_names, _, _ = self.list_playlists()
         if name in pl_names:
             self.logger.debug(
                 'Playlist Name Already Exists, please use another name')
@@ -70,10 +74,13 @@ class spotify:
         songs_ls = []
         table_ls = []
         for song in songs:
-            table_ls.append([i, song['name'][0:20].strip(), song['album']['name'][0:20].strip(
-            ), "%0.2f" % (song['duration_ms']/60000), song['popularity']])
+            table_ls.append([i,
+                             song['name'][0:20].strip(),
+                             song['album']['name'][0:20].strip(),
+                             "%0.2f" % (song['duration_ms'] / 60000),
+                             song['popularity']])
             songs_ls.append(song['uri'])
-            i = i+1
+            i = i + 1
         return songs_ls, table_ls
 
     def list_playlists(self, user=None):
@@ -89,8 +96,8 @@ class spotify:
             playlists = self.sp.user_playlists(self.user)['items']
         pl_names = [pl['name'] for pl in playlists]
         pl_id = [pl['id'] for pl in playlists]
-        pl_own=[pl['owner']['id'] for pl in playlists]
-        return pl_names, pl_id,pl_own
+        pl_own = [pl['owner']['id'] for pl in playlists]
+        return pl_names, pl_id, pl_own
 
     def list_pl_songs(self, pl_id, user=None):
         """[list all the songs for a given playlist id]
@@ -108,8 +115,11 @@ class spotify:
         song_uri_ls = [song['track']['uri'] for song in res['items']]
         song_ls = []
         for i, song in enumerate(res['items']):
-            song_ls.append([i, song['track']['name'][0:20].strip(), song['track']['album']['name'][0:20].strip(
-            ), "%0.2f" % (song['track']['duration_ms']/60000), song['track']['popularity']])
+            song_ls.append([i,
+                            song['track']['name'][0:20].strip(),
+                            song['track']['album']['name'][0:20].strip(),
+                            "%0.2f" % (song['track']['duration_ms'] / 60000),
+                            song['track']['popularity']])
         return song_uri_ls, song_ls
 
     def add_song_to_playlist(self, song_uri, playlist_id, user=None):
@@ -128,7 +138,7 @@ class spotify:
             else:
                 self.sp.user_playlist_add_tracks(
                     self.user, playlist_id, song_uri)
-   
+
     def list_users_friends(self):
         """[would list out friends, not working]
         """

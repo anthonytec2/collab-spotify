@@ -7,6 +7,7 @@ import controller
 from cursesmenu import CursesMenu
 from cursesmenu.items import FunctionItem, SubmenuItem, CommandItem, SelectionItem, ExitItem
 
+
 class run_display:
     def __init__(self, sp):
         self.logger = logging.getLogger(__name__)
@@ -20,7 +21,7 @@ class run_display:
         try:
             song_name = input(desc).strip()
             return song_name
-        except:
+        except BaseException:
             self.logger.debug("Error trying to parse song name")
             return -1
 
@@ -43,7 +44,7 @@ class run_display:
                 return option
             else:
                 raise ValueError
-        except:
+        except BaseException:
             self.logger.debug("Error trying to parse options #")
             return -1
 
@@ -67,11 +68,17 @@ class run_display:
     def display_commands(self, user=None):
         """[displats all commands for user]
         """
-    
+
         if user:
-            menu = CursesMenu("Spotify Collobrative Playlist", "User: " + user,show_exit_option=False)
+            menu = CursesMenu(
+                "Spotify Collobrative Playlist",
+                "User: " + user,
+                show_exit_option=False)
         else:
-            menu = CursesMenu("Spotify Collobrative Playlist", "User",show_exit_option=True)
+            menu = CursesMenu(
+                "Spotify Collobrative Playlist",
+                "User",
+                show_exit_option=True)
         sl1 = SelectionItem("Choose Active Playlist", 1)
         sl2 = SelectionItem("Add new song to playlist", 2)
         sl3 = SelectionItem("List Playlists", 3)
@@ -87,5 +94,3 @@ class run_display:
         menu.start()
         menu.join()
         return menu.returned_value
-
-
