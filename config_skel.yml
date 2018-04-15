@@ -1,0 +1,5 @@
+username:
+scope: playlist-read-private, playlist-read-collaborative, playlist-modify-private, user-follow-read, user-library-read, user-modify-playback-state, 
+spotipy_client_id:
+spotipy_client_secret:
+spotipy_redirect_uri: http://localhost:8080
